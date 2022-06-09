@@ -37,9 +37,9 @@
   - onSubmit, onUpdate:
     when device or remote source is offline, a pending transaction is stored to escrow and localStorage;
     when connected, escrow is submitted and unsuccessful transaction removed from localStorage;
-	- onRemoteEvent (subscriptions, polling)
-	  when a change to a data node is registered at a backend API, a partial or a full data node
-	  is delivered to online clients that request such data by subscription, polling or a query;
+  - onRemoteEvent (subscriptions, polling)
+    when a change to a data node is registered at a backend API, a partial or a full data node
+    is delivered to online clients that request such data by subscription, polling or a query;
 
   React, Redux
   - react and redux store data state in components and in a centralized data store, respectively
@@ -69,86 +69,86 @@ var jsonionInMemoryData = { "collectionKey": [] };
 var isLocalStorage = (typeof window !== 'undefined' && window.localStorage !== 'undefined');
 
 function d_b (adapter) {
-	return new jsonionDB(adapter);
+  return new jsonionDB(adapter);
 }
 
  //
 // Adapters: inMemory, localStorage, ...
 
 function inMemory (d_b) {
-	d_b.setCollection = (key, value) => {
-		jsonionInMemoryData[key] = value;
-		return true;
-	};
+  d_b.setCollection = (key, value) => {
+    jsonionInMemoryData[key] = value;
+    return true;
+  };
 
-	d_b.getCollection = (key) => (typeof jsonionInMemoryData[key] !== 'undefined') 
-	   ? jsonionInMemoryData[key] : false;
+  d_b.getCollection = (key) => (typeof jsonionInMemoryData[key] !== 'undefined') 
+     ? jsonionInMemoryData[key] : false;
 
-	d_b.removeCollection = (key) => delete jsonionInMemoryData[key];
-	d_b.clear = () => jsonionInMemoryData = {};
+  d_b.removeCollection = (key) => delete jsonionInMemoryData[key];
+  d_b.clear = () => jsonionInMemoryData = {};
 
-	return d_b;
+  return d_b;
 }
 
 function localStorage (d_b) {
-	if (!isLocalStorage)
-		return inMemory(d_b);
+  if (!isLocalStorage)
+    return inMemory(d_b);
 
-	if (isLocalStorage) {
-		d_b.setCollection = (key, value) => {
-			try {
-				value = JSON.stringify(value);
-				window.localStorage.setItem(key, value);
-				return true;
-			} catch (error) {
-				return error;
-			}
-		};
+  if (isLocalStorage) {
+    d_b.setCollection = (key, value) => {
+      try {
+        value = JSON.stringify(value);
+        window.localStorage.setItem(key, value);
+        return true;
+      } catch (error) {
+        return error;
+      }
+    };
 
-		d_b.getCollection = (key) => {
-			try {
-				var item = window.localStorage.getItem(key);
-				if(item !== 'undefined')
-					return JSON.parse(item);
-				else
-					return false;
-			} catch (error) {
-				return error;
-			}
-		};
+    d_b.getCollection = (key) => {
+      try {
+        var item = window.localStorage.getItem(key);
+        if(item !== 'undefined')
+          return JSON.parse(item);
+        else
+          return false;
+        } catch (error) {
+          return error;
+        }
+     };
 
-		d_b.removeCollection = (key) => {
-			try {
-				window.localStorage.removeItem(key);
-				return true;
-			} catch (error) {
-				return error;
-			}
-		};
+     d_b.removeCollection = (key) => {
+       try {
+         window.localStorage.removeItem(key);
+         return true;
+       } catch (error) {
+         return error;
+       }
+     };
 
-		d_b.clear = () => {
-			try {
-				window.localStorage.clear();
-				return true;
-			} catch (error) {
-				return error;
-			}
-		};
-	}
+     d_b.clear = () => {
+       try {
+         window.localStorage.clear();
+         return true;
+       } catch (error) {
+         return error;
+       }
+     };
+  }
 
-	return d_b;
+  return d_b;
 }
 
 class jsonionDB {
-	constructor (adapter) {
-		if (typeof adapter === 'function') {
-			this.memory = (adapter.name == "inMemory") ? adapter({}) : inMemory({});
-			this.store = (adapter.name != "inMemory") ? adapter({}) : false;
-			if (this.store)
-				this.store.collections = [/* collectionsKeys (persistent) */];
-        
+  constructor (adapter) {
+    if (typeof adapter === 'function') {
+      this.memory = (adapter.name == "inMemory") ? adapter({}) : inMemory({});
+      this.store = (adapter.name != "inMemory") ? adapter({}) : false;
+      if (this.store)
+        this.store.collections = [/* collectionsKeys (persistent) */];
+
         /* ... */
         
-		}
-	}
+    }
+  }
 }
