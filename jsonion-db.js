@@ -60,13 +60,14 @@
   
 */
 
+export default d_b;
+export { localStorage, inMemory, favoriteCollectionsPrefix };
+
 import remap from 'jsonion-remap';
 
-export { localStorage, inMemory };
-export default d_b;
-
-var jsonionInMemoryData = { "collectionKey": [] };
 var isLocalStorage = (typeof window !== 'undefined' && window.localStorage !== 'undefined');
+var jsonionInMemoryData = { "collectionKey": [] || {} };
+var favoriteCollectionsPrefix = "*.";
 
 function d_b (adapter) {
   return new jsonionDB(adapter);
@@ -183,7 +184,7 @@ class jsonionDB {
 
        // Unimplemented
        this.remap = {};
-       this.schema = {};
+       this.schemas = {};
        this.indexKeys = {};
        this.augmentations = {};
 	    
@@ -264,11 +265,11 @@ class jsonionDB {
     /* ... */
   }
 
-  insertRows (collectionKey, dataNodes, idKey = null) {
+  insertRows (collectionKey, dataNodes, idKey = null, syncResponder = null) {
     /* ... */
   }
 
-  updateRow (collectionKey, dataNode, i) {
+  updateRow (collectionKey, dataNode, i, syncResponder = null) {
     /* ... */
   }
 
@@ -344,7 +345,7 @@ class jsonionDB {
 
   // ...
 
-  validate (schema, dataNode) {
+  validate (schema, dataNode) {}
 
   validationError (ident, object = null) {}
 
